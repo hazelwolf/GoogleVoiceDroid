@@ -124,52 +124,45 @@ public class GoogleVoiceSpeech : MonoBehaviour {
 										}
 
 										//var filePath = Path.Combine("testing/", filename);
-										#if UNITY_EDITOR
-										var filePath = Application.dataPath + "/StreamingAssets/"  + filename;
-										#elif UNITY_ANDROID
-										var filePath = "jar:file://" + Application.dataPath + "!/assets/"+ filename;
-										#endif
+										var filePath = Application.persistentDataPath + "/" + filename;
 										Debug.Log("Created filepath string: " + filePath);
 										Log.text = filePath;
 
 										// Make sure directory exists if user is saving to sub dir.
-										Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+										//Directory.CreateDirectory(Path.GetDirectoryName(filePath));
 										SavWav.Save (filePath, goAudioSource.clip); //Save a temporary Wav File
 										Debug.Log( "Saving @ " + filePath);
 										Log.text = "Saving @ " + filePath;
-										// string apiURL = "http://www.google.com/speech-api/v2/recognize?output=json&lang=en-us&key=" + apiKey;
-										// string Response;
-										// WWW androidFile = new WWW(filePath);		
-										// Debug.Log( "Uploading " + androidFile);
-										// Log.text = "Uploading " + androidFile;
-										// Response = HttpUploadFile (apiURL, filePath, "file", "audio/wav; rate=44100");
-										// Debug.Log ("Response String: " +Response);
-										// Log.text = "Response String: " +Response;
-										// var jsonresponse = SimpleJSON.JSON.Parse(Response);
+										string apiURL = "http://www.google.com/speech-api/v2/recognize?output=json&lang=en-us&key=" + apiKey;
+										string Response;
+										WWW androidfile = new WWW(filePath);		
+										Debug.Log( "Uploading " + androidfile);
+										Log.text = "Uploading " + androidfile;
+										Response = HttpUploadFile (apiURL, filePath, "file", "audio/wav; rate=44100");
+										Debug.Log ("Response String: " +Response);
+										Log.text = "Response String: " +Response;
+										var jsonresponse = SimpleJSON.JSON.Parse(Response);
 
-										// if (jsonresponse != null) {		
-										// 		string resultString = jsonresponse ["result"] [0].ToString ();
-										// 		var jsonResults = SimpleJSON.JSON.Parse (resultString);
+										if (jsonresponse != null) {		
+												string resultString = jsonresponse ["result"] [0].ToString ();
+												var jsonResults = SimpleJSON.JSON.Parse (resultString);
 
-										// 		string transcripts = jsonResults ["alternative"] [0] ["transcript"].ToString ();
+												string transcripts = jsonResults ["alternative"] [0] ["transcript"].ToString ();
 
-										// 		Debug.Log ("transcript string: " + transcripts );
-										// 		Log.text = transcripts;
-										// 		TextBox.text = transcripts;
+												Debug.Log ("transcript string: " + transcripts );
+												Log.text = transcripts;
+												TextBox.text = transcripts;
 
-										//  }
-										//     while(!androidFile.isDone)
-         								// 	{
-             							// 		Debug.Log("uploading");
-										// 		 Log.text = "uploading";
-         								// 	}
-										// ourAudioSource = this.GetComponent<AudioSource>();
-										// ourAudioSource.clip = androidFile.GetAudioClip(false, false, AudioType.WAV);
-         								goAudioSource.Play(); 
+										 }
+										    // while(!androidFile.isDone)
+         									// {
+             								// 	Debug.Log("uploading");
+											// 	 Log.text = "uploading";
+         									// }
+         								//goAudioSource.Play(); 
 		 								//Playback the recorded audio
-										
-										Log.text = "Playback";
-										//File.Delete(filePath); //Delete the Temporary Wav file
+										//Log.text = "Playback";
+										File.Delete(filePath); //Delete the Temporary Wav file
 									
 								}
 
